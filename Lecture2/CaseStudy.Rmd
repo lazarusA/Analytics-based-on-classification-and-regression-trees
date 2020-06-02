@@ -1,0 +1,105 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+Mouse Allergen and Asthma Cohort Study (MAACS)
+
+“Are overweight individuals, as measured by body mass index (BMI), more susceptible than normal weight individuals to the harmful effects of PM2.5 on asthma symptoms?”
+
+https://laqm.defra.gov.uk/public-health/pm25.html
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+maacs <- read.csv("bmi_pm25_no2_sim.csv")
+str(maacs)
+```
+```{r}
+maacs
+```
+NocturnalSymp, is the number of days in the past 2 weeks where the child experienced asthma symptoms (e.g. coughing, wheezing) while sleeping.
+```{r}
+head(maacs)
+```
+```{r}
+g <- ggplot(maacs, aes(logpm25, NocturnalSympt))
+summary(g)
+```
+```{r}
+g <- ggplot(maacs, aes(logpm25, NocturnalSympt))
+print(g)
+```
+Adding layers... 
+```{r}
+g <- ggplot(maacs, aes(logpm25, NocturnalSympt))
+g + geom_point()
+```
+
+```{r}
+g + geom_point() + geom_smooth()
+```
+
+```{r}
+g + geom_point() + geom_smooth(method = "lm")
+```
+Facets!!! Becayse our primary question involves comparing overweight individuals to normal weight individuals. 
+```{r}
+g + geom_point() + 
+        geom_smooth(method = "lm") +
+        facet_grid(. ~ bmicat) 
+```
+More options... 
+
+```{r}
+g + geom_point(color = "steelblue", size = 4, alpha = 1/2)
+```
+```{r}
+g + geom_point(aes(color = bmicat), size = 4, alpha = 1/2)
+```
+
+```{r}
+g + geom_point(aes(color = bmicat)) + 
+        labs(title = "MAACS Cohort") + 
+        labs(x = expression("log " * PM[2.5]), y = "Nocturnal Symptoms")
+```
+```{r}
+g + geom_point(aes(color = bmicat)) + theme_bw()
+```
+Extra. y-limits... 
+```{r}
+testdat <- data.frame(x = 1:100, y = rnorm(100))
+testdat[50,2] <- 100  ## Outlier!
+g <- ggplot(testdat, aes(x = x, y = y))
+g + geom_line()
+```
+```{r}
+g + geom_line() + ylim(-3, 3)
+```
+What this does is subset the data so that only observations between -3 and 3 are included, then plot the data.
+```{r}
+p <- g + geom_line() + coord_cartesian(ylim = c(-3, 3))
+p
+```
+```{r}
+p + annotate("text", x = c(45,55), y = c(2,2), label = c("here1", "here2"), 
+             color = c("red", "blue"))
+```
+

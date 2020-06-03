@@ -1,0 +1,39 @@
+---
+title: "Lecture 3. Actividad"
+author: "Lazaro Alonso"
+date: "6/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(nycflights13)
+library(tidyverse)
+library(patchwork)
+head(flights)
+```
+
+```{r}
+airlines_data <- airlines
+airports_data <- airports
+flights_data <- flights
+planes_data <- planes
+weather_data <- weather
+# Variables in flights dataset
+?flights
+```
+Grafica!! 
+
+```{r}
+ggplot(weather_data, aes(x = temp)) +
+  geom_histogram(binwidth = 3, color = "grey", fill = "red", alpha= 0.5) + 
+  labs(x = "Temperature (degrees F)", y = "Count", 
+       title = "New York City Airport Temperatures 2013")
+```
+
+```{r}
+help(weather)
+```
+
